@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block titulo %}Eliminar Miembro | Gym Manager{% endblock %}
+
+{% block contenido %}
+<div class="confirm-delete">
+    <h2>¿Estás seguro de que quieres borrar a "{{ miembro.nombre }} {{ miembro.apellido }}"?</h2>
+    <p>Esta acción no se puede deshacer.</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="actions">
+            <button type="submit" class="btn btn-danger">Sí, Borrar</button>
+            <a href="{% url 'app_gym:detalle_miembro' miembro.id_miembro %}" class="btn">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

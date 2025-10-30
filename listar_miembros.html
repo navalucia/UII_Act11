@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block titulo %}Miembros | Gym Manager{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <h2>Miembros Registrados</h2>
+    <a href="{% url 'app_gym:crear_miembro' %}" class="btn btn-primary">+ Registrar Miembro</a>
+</div>
+
+<ul class="grid-layout">
+    {% for miembro in miembros %}
+    <li class="card">
+        {# Aseguramos que id_miembro exista antes de generar la URL #}
+        {% if miembro.id_miembro %}
+            <a href="{% url 'app_gym:detalle_miembro' miembro.id_miembro %}">
+                {% if miembro.foto_perfil %}
+                    <img src="{{ miembro.foto_perfil.url }}" alt="Foto de {{ miembro.nombre }}" class="card-img">
+                {% else %}
+                    <div class="card-placeholder">👤</div>
+                {% endif %}
+                <div class="card-info">
+                    <h3>{{ miembro.nombre }} {{ miembro.apellido }}</h3>
+                    <p>Teléfono: {{ miembro.telefono|default:"N/A" }}</p>
+                    <p>Membresía: {% if miembro.id_membresia %}{{ miembro.id_membresia.nombre }}{% else %}Ninguna{% endif %}</p>
+                    <p>Registrado: {{ miembro.fecha_registro|date:"d M, Y" }}</p>
+                </div>
+            </a>
+        {% else %}
+            {# Si no hay id_miembro, mostramos el miembro sin enlace o con un enlace diferente #}
+            <div class="card-no-link"> {# Puedes aplicar estilos a esta clase si quieres #}
+                {% if miembro.foto_perfil %}
+                    <img src="{{ miembro.foto_perfil.url }}" alt="Foto de {{ miembro.nombre }}" class="card-img">
+                {% else %}
+                    <div class="card-placeholder">👤</div>
+                {% endif %}
+                <div class="card-info">
+                    <h3>{{ miembro.nombre }} {{ miembro.apellido }} (ID no disponible)</h3>
+                    <p>Teléfono: {{ miembro.telefono|default:"N/A" }}</p>
+                    <p>Membresía: {% if miembro.id_membresia %}{{ miembro.id_membresia.nombre }}{% else %}Ninguna{% endif %}</p>
+                    <p>Registrado: {{ miembro.fecha_registro|date:"d M, Y" }}</p>
+                </div>
+            </div>
+        {% endif %}
+    </li>
+    {% empty %}
+    <li class="empty-message">No hay miembros registrados.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block titulo %}{{ miembro.nombre }} {{ miembro.apellido }} | Gym Manager{% endblock %}
+
+{% block contenido %}
+<article class="detail-container">
+    <div class="detail-banner">
+        {% if miembro.foto_perfil %}
+            <img src="{{ miembro.foto_perfil.url }}" alt="Foto de {{ miembro.nombre }}" class="detail-photo">
+        {% else %}
+            <div class="detail-placeholder">👤</div>
+        {% endif %}
+        <div class="detail-info">
+            <h1>{{ miembro.nombre }} {{ miembro.apellido }}</h1>
+            <p><strong>Fecha de Nacimiento:</strong> {{ miembro.fecha_nacimiento|date:"d M, Y" }}</p>
+            <p><strong>Teléfono:</strong> {{ miembro.telefono|default:"N/A" }}</p>
+            <p><strong>Membresía:</strong>
+                {% if miembro.id_membresia %}
+                    {{ miembro.id_membresia.nombre }}
+                    (Costo: ${{ miembro.id_membresia.costo_mensual }})
+                {% else %}
+                    Ninguna
+                {% endif %}
+            </p>
+            <p><strong>Fecha de Registro:</strong> {{ miembro.fecha_registro|date:"d M, Y" }}</p>
+        </div>
+    </div>
+
+    <div class="detail-actions">
+        <a href="{% url 'app_gym:editar_miembro' miembro.id_miembro %}" class="btn btn-secondary">✏️ Editar Miembro</a>
+        <a href="{% url 'app_gym:borrar_miembro' miembro.id_miembro %}" class="btn btn-danger">🗑️ Borrar Miembro</a>
+    </div>
+</article>
+{% endblock %}
